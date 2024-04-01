@@ -21,6 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'vbalance', 
+        'is_pro',   
     ];
 
     /**
@@ -40,5 +42,14 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'vbalance' => 'decimal:2',
+        'is_pro' => 'boolean',
     ];
+
+    public function vehicles()
+    {
+        return $this->belongsToMany(Vehicle::class, 'user_vehicle')
+                    ->withPivot('color', 'cubic_m', 'price')
+                    ->withTimestamps();
+    }
 }

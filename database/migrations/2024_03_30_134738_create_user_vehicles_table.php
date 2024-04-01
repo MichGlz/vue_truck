@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('vehicle_id')->constrained()->onDelete('cascade');
             $table->string('color');
             $table->string('size');
-            $table->float('price');
+            $table->decimal('price', 10, 2);
             $table->timestamps();
         });
     }

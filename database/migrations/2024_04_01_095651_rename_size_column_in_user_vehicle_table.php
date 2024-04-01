@@ -11,14 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('vehicles', function (Blueprint $table) {
-            $table->id();
-            $table->string('brand');
-            $table->string('model');
-            $table->json('colors');
-            $table->json('sizes');
-            $table->decimal('base_price', 10, 2);
-            $table->timestamps();
+        Schema::table('user_vehicle', function (Blueprint $table) {
+            $table->renameColumn('size', 'cubic_m');
         });
     }
 
@@ -27,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('vehicles');
+        Schema::table('user_vehicle', function (Blueprint $table) {
+            $table->renameColumn('cubic_m', 'size');
+        });
     }
 };

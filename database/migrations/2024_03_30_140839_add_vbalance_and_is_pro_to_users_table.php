@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->float('vbalance')->default(10000); 
+            $table->decimal('vbalance', 10, 2)->default(10000); 
             $table->boolean('is_pro')->default(false); 
         });
     }
