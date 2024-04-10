@@ -1,12 +1,20 @@
 <template>
-    <v-card :variant="variant" class="mx-auto pa-2" max-width="80%">
-        <v-container class="d-flex">
+    <v-card
+        :variant="variant"
+        class="mx-auto pa-2 rounded-xl bg-semitrans"
+        max-width="80%"
+        min-width="min(500px, 94%)"
+    >
+        <v-container class="d-flex flex-wrap flex-sm-nowrap">
             <v-container>
                 <v-img
                     :aspect-ratio="1"
                     cover
                     :src="pictureUrl"
                     max-width="300px"
+                    class="rounded-xl"
+                    :class="isDisabled ? 'disabled-image' : ''"
+                    style="border: solid 1px; border-color: hotpink"
                 ></v-img>
                 <div>
                     <v-card-title> {{ truck.model }} </v-card-title>
@@ -14,7 +22,9 @@
                 </div>
             </v-container>
             <v-container>
-                <v-card-text class="mb-0"> ${{ formattedPrice }} </v-card-text>
+                <v-card-text class="mb-0"
+                    >Price: ${{ formattedPrice }}
+                </v-card-text>
                 <v-card-title>Options</v-card-title>
                 <v-select
                     v-model="selectedColor"
@@ -33,7 +43,15 @@
             </v-container>
         </v-container>
         <v-card-actions v-if="isStore">
-            <v-btn class="ml-auto mb-3" @click="handleAddVehicle"> Add </v-btn>
+            <v-btn
+                color="#444746"
+                class="ml-auto mb-3"
+                @click="handleAddVehicle"
+                variant="outlined"
+                :disabled="isDisabled"
+            >
+                Add
+            </v-btn>
         </v-card-actions>
     </v-card>
 </template>
@@ -51,6 +69,9 @@ export default {
         isStore: {
             type: Boolean,
             default: true,
+        },
+        userBalance: {
+            type: Number,
         },
     },
     data() {
@@ -86,8 +107,19 @@ export default {
             });
         },
     },
+    computed: {
+        isDisabled() {
+            return this.isStore && this.formattedPrice > this.userBalance;
+        },
+    },
     watch: {
         selectedSize: "updatePrice",
     },
 };
 </script>
+<style>
+.disabled-image {
+    filter: grayscale(0.9);
+    opacity: 0.8;
+}
+</style>

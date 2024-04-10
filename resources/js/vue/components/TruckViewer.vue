@@ -1,18 +1,29 @@
 <template>
     <div class="truck__viewer">
-        <v-sheet class="mx-auto mb-4" max-width="800">
-            <h4 v-if="title">{{ title }}</h4>
-            <v-carousel v-model="model" hide-delimiters :show-arrows="false">
+        <v-sheet class="mx-auto mb-4 bg-transparent" max-width="800">
+            <h4 v-if="title" class="d-flex justify-space-between">
+                <span class="d-inline-block">{{ title }}</span
+                ><span class="d-inline-block">
+                    your balance: ${{ user?.vbalance }}</span
+                >
+            </h4>
+            <v-carousel
+                v-model="model"
+                hide-delimiters
+                :show-arrows="false"
+                height="fit-content"
+            >
                 <v-carousel-item
                     v-for="(truck, i) in trucks"
                     :key="'pic-' + i"
                     :value="i"
                 >
-                    <v-sheet class="py-3" color="#80cbc4" height="100%" tile>
+                    <v-sheet class="py-3 bg-blur" height="100%" tile>
                         <big-card
                             :truck="truck"
                             :pictureUrl="pictureUrl(i, 'large')"
                             @add="handleAddVehicle"
+                            :userBalance="user?.vbalance"
                         ></big-card>
                     </v-sheet>
                 </v-carousel-item>

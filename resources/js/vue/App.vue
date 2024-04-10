@@ -1,5 +1,5 @@
 <template>
-    <v-container>
+    <v-container class="bg-map">
         <div v-if="!user" class="d-flex justify-center align-center h-screen">
             <v-progress-circular
                 :size="70"
