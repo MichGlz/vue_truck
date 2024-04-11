@@ -55,11 +55,11 @@
                     :value="i"
                     v-slot="{ toggle }"
                 >
-                    <img
-                        class="img-btn ma-3"
+                    <small-card
+                        class="img-btn ma-1 bg-grey-darken-3 color-white"
                         :class="i === model ? 'border-orange' : ''"
-                        :src="pictureUrl(i, 'medium')"
-                        alt=""
+                        :pictureUrl="pictureUrl(i, 'medium')"
+                        :truck="truck"
                         @click="selectTruck(i, toggle)"
                     />
                 </v-slide-group-item>
@@ -69,7 +69,9 @@
 </template>
 
 <script>
-import BigCard from "../../Vue/components/BigCard.vue";
+import BigCard from "./BigCard.vue";
+import SmallCard from "./SmallCard.vue";
+
 export default {
     props: {
         title: {
@@ -89,6 +91,7 @@ export default {
     },
     components: {
         BigCard,
+        SmallCard,
     },
     methods: {
         selectTruck(i, toggle) {
