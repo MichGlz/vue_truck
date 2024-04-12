@@ -1,10 +1,20 @@
 <template>
     <div class="truck__viewer">
         <v-sheet class="mx-auto mb-4 bg-transparent" max-width="800">
-            <h4 v-if="title" class="d-flex justify-space-between">
-                <span class="d-inline-block">
-                    {{ title + " " + user?.name }}</span
-                ><span class="d-inline-block ml-10">
+            <h4
+                v-if="title"
+                class="d-flex justify-space-between text-2xl font-bold text-white p-2 bg-blur"
+            >
+                <span
+                    ><span class="d-inline-block">{{ title }}</span
+                    ><span
+                        v-if="user"
+                        class="d-inline-block ml-2 text-3xl capitalize"
+                    >
+                        {{ user?.name }}</span
+                    ></span
+                >
+                <span class="d-inline-block ml-10">
                     your balance: ${{ user?.vbalance }}</span
                 >
             </h4>
