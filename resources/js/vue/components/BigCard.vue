@@ -1,6 +1,5 @@
 <template>
     <v-card
-        :variant="variant"
         class="mx-auto pa-2 rounded-xl bg-semitrans"
         max-width="80%"
         min-width="min(500px, 94%)"
@@ -28,13 +27,13 @@
                 <v-card-title>Options</v-card-title>
                 <v-select
                     v-model="selectedColor"
-                    :items="this.truck.colors"
+                    :items="truck.colors"
                     label="Color"
                     :readonly="!isStore"
                 ></v-select>
                 <v-select
                     v-model="selectedSize"
-                    :items="this.truck.sizes"
+                    :items="truck.sizes"
                     item-title="cubic_m"
                     item-value="cubic_m"
                     label="Cubic Meters"
@@ -44,7 +43,7 @@
         </v-container>
         <v-card-actions v-if="isStore">
             <v-btn
-                color="#444746"
+                color="#fff8dc"
                 class="ml-auto mb-3"
                 @click="handleAddVehicle"
                 variant="outlined"
@@ -56,8 +55,10 @@
     </v-card>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
     props: {
         truck: {
             type: Object,
@@ -88,7 +89,8 @@ export default {
             if (this.selectedSize) {
                 const selectedSize = this.selectedSize;
                 const sizeData = this.truck.sizes.find(
-                    (size) => size.cubic_m === selectedSize
+                    (size: null | { [key: string]: any }) =>
+                        size?.cubic_m === selectedSize
                 );
                 if (sizeData) {
                     const priceFactor = sizeData.price_factor || 1;
@@ -108,14 +110,24 @@ export default {
         },
     },
     computed: {
-        isDisabled() {
-            return this.isStore && this.formattedPrice > this.userBalance;
+        isDisabled(): boolean {
+            if (this.isStore && this.userBalance !== undefined) {
+                console.log(
+                    "user balance",
+                    this.userBalance,
+                    " price",
+                    this.formattedPrice,
+                    this.formattedPrice > this.userBalance
+                );
+                return Number(this.formattedPrice) > Number(this.userBalance);
+            }
+            return false;
         },
     },
     watch: {
         selectedSize: "updatePrice",
     },
-};
+});
 </script>
 <style>
 .disabled-image {

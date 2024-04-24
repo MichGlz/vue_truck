@@ -1,5 +1,5 @@
 <template>
-    <v-card :variant="variant">
+    <v-card>
         <v-container class="position-relative">
             <v-img
                 class="opacity-5"
@@ -20,8 +20,10 @@
     </v-card>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
     props: {
         truck: {
             type: Object,
@@ -34,7 +36,7 @@ export default {
     data() {
         return {};
     },
-};
+});
 </script>
 <style scoped>
 .position-absolute {

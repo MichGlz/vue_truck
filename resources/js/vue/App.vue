@@ -20,16 +20,18 @@
         </div>
     </v-container>
 </template>
-<script>
-import TruckViewer from "../Vue/components/TruckViewer.vue";
-import UserViewer from "../Vue/components/UserViewer.vue";
+<script lang="ts">
+import { defineComponent } from "vue";
+import TruckViewer from "@/Vue/components/TruckViewer.vue";
+import UserViewer from "@/Vue/components/UserViewer.vue";
 
-export default {
+export default defineComponent({
+    name: "App",
     data() {
         return {
             userId: 2,
             X_CSRF_TOKEN: "",
-            user: null,
+            user: null as null | { [key: string]: any },
         };
     },
     components: {
@@ -37,23 +39,24 @@ export default {
         UserViewer,
     },
     methods: {
-        fetchUser() {
-            const options = { method: "GET" };
-            const url = `/api/user/${this.userId}`;
-            fetch(url, options)
-                .then((response) => response.json())
-                .then((response) => {
-                    console.log(response);
-                    this.user = { ...response.data };
-                })
-                .catch((err) => console.error(err));
+        async fetchUser() {
+            try {
+                const response = await fetch(`/api/user/${this.userId}`);
+                const userData = await response.json();
+                this.user = { ...userData.data };
+            } catch (error) {
+                console.error(error);
+            }
         },
     },
     mounted() {
-        this.X_CSRF_TOKEN = document.head.querySelector(
-            'meta[name="csrf-token"]'
-        ).content;
+        this.X_CSRF_TOKEN =
+            (
+                document.head.querySelector(
+                    'meta[name="csrf-token"]'
+                ) as HTMLMetaElement
+            )?.content || "";
         this.fetchUser();
     },
-};
+});
 </script>

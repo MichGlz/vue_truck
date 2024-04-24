@@ -53,11 +53,12 @@
     </div>
 </template>
 
-<script>
-import BigCard from "../../Vue/components/BigCard.vue";
-import SmallCard from "../../Vue/components/SmallCard.vue";
+<script lang="ts">
+import { defineComponent } from "vue";
+import BigCard from "@/Vue/components/BigCard.vue";
+import SmallCard from "@/Vue/components/SmallCard.vue";
 
-export default {
+export default defineComponent({
     props: {
         title: {
             type: String,
@@ -68,8 +69,8 @@ export default {
     },
     data() {
         return {
-            picturesUrl: [],
-            trucks: [],
+            picturesUrl: [] as any[],
+            trucks: [] as any[],
             model: 0,
             vehicle: {},
         };
@@ -79,7 +80,7 @@ export default {
         SmallCard,
     },
     methods: {
-        selectTruck(i, toggle) {
+        selectTruck(i: number, toggle: Function) {
             //update ui
             toggle();
             this.model = i;
@@ -120,29 +121,35 @@ export default {
                 .then((response) => {
                     //console.log(response.media);
                     const images = response.media;
-                    const urls = images.map((img) => img.src);
+                    const urls = images.map(
+                        (img: { [key: string]: string }) => img.src
+                    );
                     this.picturesUrl = [...urls];
                 })
                 .catch((err) => console.error(err));
         },
 
-        pictureUrl(truckIndex, size) {
+        pictureUrl(truckIndex: number, size: string): string {
             const totalImages = this.picturesUrl.length;
-            if (totalImages < 1) return;
+            if (totalImages < 1) return "";
             const imageIndex = truckIndex % totalImages;
             // Check if the truck index is higher than the length of the image URLs array
             if (truckIndex >= totalImages) {
-                return this.picturesUrl[imageIndex][size];
+                return this.picturesUrl[imageIndex][size as keyof string];
             } else {
-                return this.picturesUrl[truckIndex][size];
+                return this.picturesUrl[truckIndex][size as keyof string];
             }
         },
 
-        handleAddVehicle(data) {
-            console.log(data);
-            const X_CSRF_TOKEN = document.head.querySelector(
+        handleAddVehicle(data: { truck: any; color: string; size: string }) {
+            //console.log(data);
+            const metaElement = document.head.querySelector(
                 'meta[name="csrf-token"]'
-            ).content;
+            );
+            const X_CSRF_TOKEN =
+                metaElement instanceof HTMLMetaElement
+                    ? metaElement.content
+                    : "";
             const url = `/api/user/${this.user?.id}/add-vehicle`;
             const options = {
                 method: "POST",
@@ -171,7 +178,7 @@ export default {
         this.fetchTestImages();
         this.fetchTrucks();
     },
-};
+});
 </script>
 <style scoped>
 .img-btn {
